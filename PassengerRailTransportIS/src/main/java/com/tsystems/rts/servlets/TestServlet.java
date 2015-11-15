@@ -1,4 +1,4 @@
-package com.tsystems.javaschool.servlets;
+package com.tsystems.rts.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
