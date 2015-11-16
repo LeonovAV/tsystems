@@ -13,7 +13,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 /**
- * Class represents ticket table.
+ * Class represents ticket entity.
  * @author Anton
  * @version 0.0.1
  *

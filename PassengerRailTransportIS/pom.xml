@@ -24,6 +24,7 @@
       <scope>test</scope>
     </dependency>
     
+    <!-- Add Hibernate -->
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-core</artifactId>
@@ -59,6 +60,19 @@
 	  <artifactId>mysql-connector-java</artifactId>
 	  <version>5.1.6</version>
 	</dependency>
+	
+	<!-- Logger for JDBC -->
+	<dependency>
+	  <groupId>org.lazyluke</groupId>
+	  <artifactId>log4jdbc-remix</artifactId>
+	  <version>0.2.7</version>
+	</dependency>
+	
+	<dependency>
+	  <groupId>org.slf4j</groupId>
+	  <artifactId>slf4j-log4j12</artifactId>
+	  <version>1.7.5</version>
+	</dependency>
     
   </dependencies>
   
@@ -77,6 +91,7 @@
   	    </configuration>
   	  </plugin>
   	  
+  	  <!-- Add Sonar for code checking -->
   	  <plugin>
   	    <groupId>org.codehaus.mojo</groupId>
   	    <artifactId>sonar-maven-plugin</artifactId>

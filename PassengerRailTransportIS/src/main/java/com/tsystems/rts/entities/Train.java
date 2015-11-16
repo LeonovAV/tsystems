@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -16,7 +17,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
- * 
+ * Class represents train entity.
  * @author Anton
  * @version 0.0.1
  *
@@ -26,7 +27,7 @@ import javax.validation.constraints.Size;
 public class Train {
 	
 	@Id
-	@Column(name = "trainId")
+	@Column(name = "train_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long trainId;
 	
@@ -53,6 +54,12 @@ public class Train {
 	
 	@OneToMany(mappedBy = "train")
 	private List<Ticket> trainTickets = new ArrayList<Ticket>();
+	
+	@ManyToMany(mappedBy = "trains")
+	private List<Station> route = new ArrayList<Station>();
+	
+	@OneToMany(mappedBy = "train")
+	private List<Schedule> schedules = new ArrayList<Schedule>();
 	
 	public Train() {
 	}
@@ -111,6 +118,22 @@ public class Train {
 
 	public void setTrainTickets(List<Ticket> trainTickets) {
 		this.trainTickets = trainTickets;
+	}
+
+	public List<Station> getRoute() {
+		return route;
+	}
+
+	public void setRoute(List<Station> route) {
+		this.route = route;
+	}
+
+	public List<Schedule> getSchedules() {
+		return schedules;
+	}
+
+	public void setSchedules(List<Schedule> schedules) {
+		this.schedules = schedules;
 	}
 	
 }

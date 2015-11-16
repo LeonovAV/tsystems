@@ -8,7 +8,10 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
 import com.tsystems.rts.entities.Passenger;
+import com.tsystems.rts.entities.Schedule;
+import com.tsystems.rts.entities.Station;
 import com.tsystems.rts.entities.Ticket;
+import com.tsystems.rts.entities.Train;
 
 /**
  * Class contains methods for common operations with Hibernate session factory, sessions and transactions
@@ -21,10 +24,7 @@ public class HibernateUtil {
 	
 	static {
 		try {
-			Configuration configuration = new Configuration();
-			configuration.configure("hibernate.cfg.xml");
-			configuration.addAnnotatedClass(Passenger.class);
-			configuration.addAnnotatedClass(Ticket.class);
+			Configuration configuration = configureHibernate();
 			ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
 					.applySettings(configuration.getProperties()).build();
 			sessionFactory = configuration.buildSessionFactory(serviceRegistry);
@@ -32,7 +32,6 @@ public class HibernateUtil {
 			System.err.println("Can not initialize sessionFactory for Hibernate" + e);
 			throw new ExceptionInInitializerError(e);
 		}
-		
 	}
 	
 	/**
@@ -87,5 +86,16 @@ public class HibernateUtil {
 	 */
 	public static void closeSessionFactory() {
 		sessionFactory.close();
+	}
+	
+	private static Configuration configureHibernate() {
+		Configuration configuration = new Configuration();
+		configuration.configure("hibernate.cfg.xml");
+		configuration.addAnnotatedClass(Passenger.class);
+		configuration.addAnnotatedClass(Ticket.class);
+		configuration.addAnnotatedClass(Train.class);
+		configuration.addAnnotatedClass(Station.class);
+		configuration.addAnnotatedClass(Schedule.class);
+		return configuration;
 	}
 }

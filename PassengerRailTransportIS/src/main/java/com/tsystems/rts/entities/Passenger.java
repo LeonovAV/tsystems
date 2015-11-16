@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
- * Class represents passenger table
+ * Class represents passenger entity.
  * @author Anton
  * @version 0.0.1
  * 
