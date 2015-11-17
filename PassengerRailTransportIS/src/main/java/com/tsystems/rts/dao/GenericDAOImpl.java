@@ -2,6 +2,7 @@ package com.tsystems.rts.dao;
 
 import java.io.Serializable;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 
 import com.tsystems.rts.utils.HibernateUtil;
@@ -23,6 +24,13 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 	public void delete(T instance) {
 		Session session = this.getSession();
 		session.delete(instance);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public T findObject(Query query) {
+		T t = null;
+		t = (T) query.uniqueResult();
+		return t;
 	}
 	
 	protected Session getSession() {

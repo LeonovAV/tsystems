@@ -3,10 +3,24 @@ package com.tsystems.rts.dao;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.hibernate.Query;
+
 import com.tsystems.rts.entities.Passenger;
 import com.tsystems.rts.utils.HibernateUtil;
 
+/**
+ * 
+ * @author Anton
+ *
+ */
 public class PassengerDAOImpl extends GenericDAOImpl<Passenger, Long> implements PassengerDAO {
+	
+	public Passenger findPassenger(String firstName, String lastName) {
+		String sqlQuery = "SELECT p FROM Passenger p WHERE p.firstName = :firstName AND p.lastName = :lastName";
+		Query query = HibernateUtil.getSession().createQuery(sqlQuery)
+				.setParameter("firstName", firstName).setParameter("lastName", lastName);
+		return findObject(query);
+	}
 	
 	public static void main(String[] args) {
 		HibernateUtil.beginTransaction();

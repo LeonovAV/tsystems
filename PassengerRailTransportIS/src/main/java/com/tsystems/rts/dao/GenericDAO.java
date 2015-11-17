@@ -2,6 +2,8 @@ package com.tsystems.rts.dao;
 
 import java.io.Serializable;
 
+import org.hibernate.Query;
+
 /**
  * Interface for common methods for all DAO objects.
  * @author Anton
@@ -30,5 +32,12 @@ public interface GenericDAO<T, ID extends Serializable> {
 	 * @param instance object, that will be deleted from data store
 	 */
 	void delete(T instance);
+	
+	/**
+	 * 
+	 * @param query
+	 * @return
+	 */
+	T findObject(Query query);
 	
 }
