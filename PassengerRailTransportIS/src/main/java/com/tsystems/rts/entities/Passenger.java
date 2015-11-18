@@ -14,6 +14,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.Type;
+
 /**
  * Class represents passenger entity.
  * @author Anton
@@ -40,6 +42,7 @@ public class Passenger {
 	private String lastName;
 	
 	@Column(name = "birthdate")
+	@Type(type = "date")
 	private Date birthdate;
 	
 	@OneToMany(mappedBy = "passenger")

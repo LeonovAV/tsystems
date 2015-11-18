@@ -1,5 +1,6 @@
 package com.tsystems.rts.entities;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -42,7 +43,7 @@ public class Train {
 	
 	@Column(name = "starting_date")
 	@NotNull
-	private Date startingDate;
+	private Timestamp startingDate;
 	
 	@Column(name = "current_starting_date")
 	@NotNull
@@ -88,11 +89,11 @@ public class Train {
 		this.seatsNumber = seatsNumber;
 	}
 
-	public Date getStartingDate() {
+	public Timestamp getStartingDate() {
 		return startingDate;
 	}
 
-	public void setStartingDate(Date startingDate) {
+	public void setStartingDate(Timestamp startingDate) {
 		this.startingDate = startingDate;
 	}
 

@@ -1,6 +1,7 @@
 package com.tsystems.rts.dao;
 
 import java.io.Serializable;
+import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -31,6 +32,11 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 		T t = null;
 		t = (T) query.uniqueResult();
 		return t;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<T> findObjects(Query query) {
+		return (List<T>) query.list();
 	}
 	
 	protected Session getSession() {

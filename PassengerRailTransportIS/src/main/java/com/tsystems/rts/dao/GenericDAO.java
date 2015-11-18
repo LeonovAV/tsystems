@@ -1,6 +1,7 @@
 package com.tsystems.rts.dao;
 
 import java.io.Serializable;
+import java.util.List;
 
 import org.hibernate.Query;
 
@@ -39,5 +40,12 @@ public interface GenericDAO<T, ID extends Serializable> {
 	 * @return
 	 */
 	T findObject(Query query);
+	
+	/**
+	 * 
+	 * @param query
+	 * @return
+	 */
+	List<T> findObjects(Query query);
 	
 }

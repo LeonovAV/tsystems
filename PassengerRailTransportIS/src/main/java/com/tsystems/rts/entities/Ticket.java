@@ -12,6 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.Type;
+
 /**
  * Class represents ticket entity.
  * @author Anton
@@ -37,9 +39,10 @@ public class Ticket {
 	@NotNull(message = "There is no ticket for train without passenger")
 	private Passenger passenger;
 	
-	@Column(name = "train_arrival_date")
+	@Column(name = "train_departure_date")
 	@NotNull(message = "Train arrival date can not be empty")
-	private Timestamp trainArrivalDate;
+	@Type(type = "timestamp")
+	private Timestamp trainDepartureDate;
 	
 	public Ticket() {
 	}
@@ -68,12 +71,12 @@ public class Ticket {
 		this.passenger = passenger;
 	}
 	
-	public Timestamp getTrainArrivalDate() {
-		return trainArrivalDate;
+	public Timestamp getTrainDepartureDate() {
+		return trainDepartureDate;
 	}
 	
-	public void setTrainArrivalDate(Timestamp trainArrivalDate) {
-		this.trainArrivalDate = trainArrivalDate;
+	public void setTrainDepartureDate(Timestamp trainDepartureDate) {
+		this.trainDepartureDate = trainDepartureDate;
 	}
 	
 }
