@@ -2,6 +2,7 @@ package com.tsystems.rts.dao;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 import com.tsystems.rts.entities.Passenger;
 
@@ -28,4 +29,19 @@ public interface PassengerDAO extends GenericDAO<Passenger, Long> {
 	 * @return
 	 */
 	public boolean hasTicketForTrain(long passengerId, long trainId, Timestamp trainDepartureDate);
+	
+	/**
+	 * 
+	 * @param trainId
+	 * @return
+	 */
+	List<Passenger> getRegisteredPassengers(long trainId);
+	
+	/**
+	 * 
+	 * @param trainId
+	 * @param trainDepartureDate
+	 * @return
+	 */
+	List<Passenger> getRegisteredPassengers(long trainId, Timestamp trainDepartureDate);
 }

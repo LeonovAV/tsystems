@@ -2,7 +2,6 @@ package com.tsystems.rts.entities;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -44,10 +43,6 @@ public class Train {
 	@Column(name = "starting_date")
 	@NotNull
 	private Timestamp startingDate;
-	
-	@Column(name = "current_starting_date")
-	@NotNull
-	private Date currentStartingDate;
 	
 	@Column(name = "period")
 	@NotNull
@@ -95,14 +90,6 @@ public class Train {
 
 	public void setStartingDate(Timestamp startingDate) {
 		this.startingDate = startingDate;
-	}
-
-	public Date getCurrentStartingDate() {
-		return currentStartingDate;
-	}
-
-	public void setCurrentStartingDate(Date currentStartingDate) {
-		this.currentStartingDate = currentStartingDate;
 	}
 
 	public int getPeriod() {

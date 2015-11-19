@@ -48,4 +48,11 @@ public interface GenericDAO<T, ID extends Serializable> {
 	 */
 	List<T> findObjects(Query query);
 	
+	/**
+	 * 
+	 * @param clazz
+	 * @return
+	 */
+	List<T> findAllObjects(Class<T> clazz);
+	
 }

@@ -3,6 +3,7 @@ package com.tsystems.rts.dao;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import org.hibernate.Query;
 
@@ -37,6 +38,23 @@ public class PassengerDAOImpl extends GenericDAOImpl<Passenger, Long> implements
 		return passenger == null ? false : true;
 	}
 	
+	public List<Passenger> getRegisteredPassengers(long trainId) {
+		String sqlQuery = "SELECT p FROM Passenger p JOIN p.purchasedTickets t WHERE "
+				+ "t.train.trainId = :trainId";
+		Query query = HibernateUtil.getSession().createQuery(sqlQuery)
+				.setParameter("trainId", trainId);
+		return findObjects(query);
+	}
+
+	public List<Passenger> getRegisteredPassengers(long trainId, Timestamp trainDepartureDate) {
+		String sqlQuery = "SELECT p FROM Passenger p JOIN p.purchasedTickets t WHERE "
+				+ "t.train.trainId = :trainId AND t.trainDepartureDate = :trainDepartureDate";
+		Query query = HibernateUtil.getSession().createQuery(sqlQuery)
+				.setParameter("trainId", trainId)
+				.setParameter("trainDepartureDate", trainDepartureDate);
+		return findObjects(query);
+	}
+	
 	public static void main(String[] args) {
 		HibernateUtil.beginTransaction();
 		PassengerDAO pDao = new PassengerDAOImpl();
@@ -57,6 +75,19 @@ public class PassengerDAOImpl extends GenericDAOImpl<Passenger, Long> implements
 //		long newId = pDao.save(newPassenger);
 //		System.out.println("New id: " + newId);
 //		pDao.delete(newPassenger);
+		
+//		List<Passenger> p = pDao.getRegisteredPassengers(2L);
+//		
+//		for (Passenger passenger : p) {
+//			System.out.println(passenger.getPassengerId());
+//		}
+		
+		List<Passenger> p = pDao.getRegisteredPassengers(2L, Timestamp.valueOf("2015-11-14 17:10:00"));
+		
+		for (Passenger passenger : p) {
+			System.out.println(passenger.getPassengerId());
+		}
+		
 		HibernateUtil.commitTransaction();
 		HibernateUtil.closeSession();
 		HibernateUtil.closeSessionFactory();

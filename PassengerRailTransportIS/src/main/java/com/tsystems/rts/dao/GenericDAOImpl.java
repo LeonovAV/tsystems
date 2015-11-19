@@ -39,6 +39,13 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 		return (List<T>) query.list();
 	}
 	
+	@SuppressWarnings("unchecked")
+	public List<T> findAllObjects(Class<T> clazz) {
+		Session session = this.getSession();
+		Query query = session.createQuery("FROM " + clazz.getName());
+		return (List<T>) query.list();
+	}
+	
 	protected Session getSession() {
 		return HibernateUtil.getSession();
 	}
