@@ -27,45 +27,61 @@ import com.tsystems.rts.utils.HibernateUtil;
 public class ScheduleService {
 	
 	/**
-	 * Add new schedule for the train with station list, arrival and departure date
-	 * for each station
-	 * @param trainId unique identifier for the train
-	 * @param stationIds list of station identifiers
-	 * @param arrivalTimes list of arrival dates and times
-	 * @param departureTimes list of departure dates and times
+	 * Allows one to create new route for the train or edit existed route.
+	 * One can change arrival and departure time and add new station from
+	 * existed to the end of the route. For the first station in the route
+	 * arrival time must be NULL. For the last station in the route departure
+	 * time must be NULL.  
+	 * @param trainId train identifier, which route will be changed or created
+	 * @param stationIds a list of identifiers of stations, which belong to the route
+	 * @param arrivalTimes a list of train arrival times
+	 * @param departureTimes a list of train departure times
 	 */
-	public void addNewSchedule(long trainId, List<Long> stationIds, 
+	public void saveSchedule(long trainId, List<Long> stationIds, 
 			List<Timestamp> arrivalTimes, List<Timestamp> departureTimes) {
 		TrainDAO trainDao = new TrainDAOImpl();
 		StationDAO sDao = new StationDAOImpl();
 		try {
 			HibernateUtil.beginTransaction();
+			
 			// Get train
 			Train train = trainDao.findById(Train.class, trainId);
 			
-			// Create route and schedule for train
-			List<Station> route = new ArrayList<Station>();
-			List<Schedule> schedules = new ArrayList<Schedule>();
+			// Obtain route and schedule for train
+			List<Station> route = train.getRoute();
+			List<Schedule> schedules = train.getSchedules();
 			
-			Station station = null;
+			// Current number of stations
+			int routeSize = route.size();
+			// If add some new station to the route
+			int newRouteSize = stationIds.size();
+			
 			Schedule schedule = null;
-			for (int i = 0; i < stationIds.size(); ++i) {
+			// Update schedules for existed stations
+			for (int i = 0; i < routeSize; ++i) {
+				schedule = schedules.get(i);
+				schedule.setArrivalTime(arrivalTimes.get(i));
+				schedule.setDepartureTime(departureTimes.get(i));
+			}
+			
+			// Add new stations and schedules for stations
+			Station station = null;
+			for (int i = routeSize; i < newRouteSize; ++i) {
+				
 				// Station to add is already exist
 				station = sDao.findById(Station.class, stationIds.get(i));
 				
-				// Create new schedule
+				// Create schedule for new station
 				schedule = new Schedule();
-				schedule.setArrivalTime(arrivalTimes.get(i));
-				schedule.setDepartureTime(departureTimes.get(i));
 				schedule.setTrain(train);
 				schedule.setStation(station);
+				schedule.setArrivalTime(arrivalTimes.get(i));
+				schedule.setDepartureTime(departureTimes.get(i));
 				
-				schedules.add(schedule);
+				// Update train
 				route.add(station);
+				schedules.add(schedule);
 			}
-			
-			train.setRoute(route);
-			train.setSchedules(schedules);
 			
 			HibernateUtil.commitTransaction();
 		} catch (HibernateException e) {
@@ -91,7 +107,25 @@ public class ScheduleService {
 	}
 	
 	public static void main(String[] args) {
+		List<Long> stationIds = new ArrayList<Long>();
+		stationIds.add(1L);
+		stationIds.add(4L);
+		stationIds.add(5L);
+		// Add new station from existed to route
+		stationIds.add(7L);
 		
+		List<Timestamp> arrivalTimes = new ArrayList<Timestamp>();
+		arrivalTimes.add(null);
+		arrivalTimes.add(Timestamp.valueOf("2015-11-15 08:30:00"));
+		arrivalTimes.add(Timestamp.valueOf("2015-11-15 13:45:00"));
+		arrivalTimes.add(Timestamp.valueOf("2015-11-15 18:15:00"));
+		List<Timestamp> departureTimes = new ArrayList<Timestamp>();
+		departureTimes.add(Timestamp.valueOf("2015-11-14 17:10:00"));
+		departureTimes.add(Timestamp.valueOf("2015-11-15 08:37:00"));
+		departureTimes.add(Timestamp.valueOf("2015-11-15 13:59:00"));
+		departureTimes.add(null);
+		
+		new ScheduleService().saveSchedule(2L, stationIds, arrivalTimes, departureTimes);
 	}
 	
 }

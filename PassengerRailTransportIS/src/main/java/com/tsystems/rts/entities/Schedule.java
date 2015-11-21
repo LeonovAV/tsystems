@@ -10,7 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.Null;
 
 /**
  * Class describes train schedule for a certain station.
@@ -35,12 +34,10 @@ public class Schedule {
 	@JoinColumn(name = "station_id")
 	private Station station;
 	
-	@Column(name = "arrival_time")
-	@Null(message = "Station is the first one for train")
+	@Column(name = "arrival_time", nullable = true)
 	private Timestamp arrivalTime;
 	
-	@Column(name = "departure_time")
-	@Null(message = "Station is the last one for train")
+	@Column(name = "departure_time", nullable = true)
 	private Timestamp departureTime;
 	
 	public Schedule() {

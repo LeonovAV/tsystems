@@ -1,18 +1,26 @@
 package com.tsystems.rts.services;
 
 /**
- * 
+ * ServiceLocator provides access to all services in the system
  * @author Anton
  * @version 0.0.1
  *
  */
-public class ServiceLocator {
+public enum ServiceLocator {
+	
+	/**
+	 * Unique instance of Service Locator
+	 */
+	INSTANCE;
+	
+	private ServiceLocator() {
+	}
 	
 	/**
 	 * 
 	 * @return
 	 */
-	public static TrainService getTrainService() {
+	public TrainService getTrainService() {
 		return new TrainService();
 	}
 	
@@ -20,8 +28,24 @@ public class ServiceLocator {
 	 * 
 	 * @return
 	 */
-	public static TicketService getTicketService() {
+	public TicketService getTicketService() {
 		return new TicketService();
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public ScheduleService getScheduleService() {
+		return new ScheduleService();
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public StationService getStationService() {
+		return new StationService();
 	}
 	
 }

@@ -3,7 +3,6 @@ package com.tsystems.rts.services;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import org.hibernate.HibernateException;
 
@@ -23,18 +22,24 @@ import com.tsystems.rts.utils.HibernateUtil;
  */
 public class TrainService {
 	
-	public void findTrains(long firstStationId, long lastStationId, Date departureDate) {
-//		TrainDAO trainDao = new TrainDAOImpl();
-//		// Check train date
-//		Train train = trainDao.findById(Train.class, trainId);
-//		int period = train.getPeriod();
-//		long startingDate = train.getStartingDate().getTime();
-//		long days = TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - startingDate);
-//		
-//		if (days % period != 0) {
-//			System.out.println("Can not buy ticket, because there is no train for this date");
-//			HibernateUtil.rollbackTransaction();
-//		}
+	/**
+	 * 
+	 * @param firstStationId
+	 * @param lastStationId
+	 * @param departureTime
+	 * @return
+	 */
+	public List<Train> findTrains(long firstStationId, long lastStationId, Date departureTime) {
+		TrainDAO trainDao = new TrainDAOImpl();
+		List<Train> trains = null;
+		try {
+			HibernateUtil.beginTransaction();
+			trains = trainDao.getTrainsBetweenStations(firstStationId, lastStationId, departureTime);
+			HibernateUtil.commitTransaction();
+		} catch (HibernateException e) {
+			HibernateUtil.rollbackTransaction();
+		}
+		return trains;
 	}
 	
 	/**

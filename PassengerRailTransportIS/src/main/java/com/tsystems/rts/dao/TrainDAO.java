@@ -13,12 +13,13 @@ import com.tsystems.rts.entities.Train;
 public interface TrainDAO extends GenericDAO<Train, Long> {
 	
 	/**
-	 * Find all trains between two stations A and B, that could be chosen by client
-	 * @param firstStationId initial station (from)
-	 * @param lastStationId last station (to)
-	 * @param departureDate when client wants to start trip from initial station
-	 * @return list of available trains
+	 * Find trains between two stations based on a certain date between
+	 * stations A (from) and B (to).
+	 * @param firstStationId first station in the route (from)
+	 * @param lastStationId last station in the route (to)
+	 * @param departureTime date to start a train search
+	 * @return a list of available trains
 	 */
-	List<Train> getTrainsBetweenStations(long firstStationId, long lastStationId, Date departureDate);
+	List<Train> getTrainsBetweenStations(long firstStationId, long lastStationId, Date departureTime);
 	
 }

@@ -4,17 +4,22 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import org.hibernate.annotations.Cascade;
 
 /**
  * Class represents train entity.
@@ -51,10 +56,13 @@ public class Train {
 	@OneToMany(mappedBy = "train")
 	private List<Ticket> trainTickets = new ArrayList<Ticket>();
 	
-	@ManyToMany(mappedBy = "trains")
+	@ManyToMany
+	@JoinTable(name = "route", joinColumns = { @JoinColumn(name = "train_id", nullable = false) },
+	   inverseJoinColumns = { @JoinColumn(name = "station_id", nullable = false) })
 	private List<Station> route = new ArrayList<Station>();
 	
 	@OneToMany(mappedBy = "train")
+	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE})
 	private List<Schedule> schedules = new ArrayList<Schedule>();
 	
 	public Train() {

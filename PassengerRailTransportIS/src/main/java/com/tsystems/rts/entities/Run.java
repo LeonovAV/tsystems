@@ -1,5 +1,6 @@
 package com.tsystems.rts.entities;
 
+import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -87,12 +88,40 @@ public class Run {
 		
 		Session session = HibernateUtil.beginTransaction();
 		// Find station by ID
-		Station station = session.get(Station.class, 1L);
-		System.out.println(station.getStationId() + " " + station.getName());
-		List<Schedule> schedules = station.getSchedules();
+//		Station station = session.get(Station.class, 1L);
+//		System.out.println(station.getStationId() + " " + station.getName());
+//		List<Schedule> schedules = station.getSchedules();
+//		for (Schedule schedule : schedules) {
+//			System.out.println(schedule.getScheduleId() + " " + schedule.getArrivalTime());
+//		}
+		
+		Train train = session.get(Train.class, 2L);
+		Station station = session.get(Station.class, 7L);
+//		
+//		List<Station> stations = train.getRoute();
+//		
+//		for (Station st : stations) {
+//			System.out.println(st.getStationId());
+//		}
+//		
+//		stations.add(station);
+		
+		List<Schedule> schedules = train.getSchedules();
 		for (Schedule schedule : schedules) {
-			System.out.println(schedule.getScheduleId() + " " + schedule.getArrivalTime());
+			System.out.println(schedule.getScheduleId() + " " + schedule.getArrivalTime() + " " + schedule.getDepartureTime());
 		}
+		
+		Schedule schedule = schedules.get(2);
+		schedule.setArrivalTime(Timestamp.valueOf("2015-11-15 13:45:00"));
+		schedule.setDepartureTime(Timestamp.valueOf("2015-11-15 13:55:00"));
+		
+		Schedule newS = new Schedule();
+		newS.setTrain(train);
+		newS.setStation(station);
+		newS.setArrivalTime(Timestamp.valueOf("2015-11-15 18:15:00"));
+		newS.setDepartureTime(null);
+		
+		schedules.add(newS);
 		
 		HibernateUtil.commitTransaction();
 		HibernateUtil.closeSession();

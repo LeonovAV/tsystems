@@ -12,11 +12,14 @@ import com.tsystems.rts.entities.Schedule;
  *
  */
 public interface ScheduleDAO extends GenericDAO<Schedule, Long>{
+	
 	/**
-	 * 
-	 * @param stationId
-	 * @param date
-	 * @return
+	 * Allows to obtain all schedules (train arrival and departure date) for 
+	 * the station on a certain date
+	 * @param stationId identifier for the chosen station
+	 * @param date chosen date
+	 * @return list of available trains and their arrival and departure time
 	 */
 	List<Schedule> getAllSchedules(long stationId, Date date);
+	
 }

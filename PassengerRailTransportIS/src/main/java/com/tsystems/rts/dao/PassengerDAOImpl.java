@@ -13,6 +13,7 @@ import com.tsystems.rts.utils.HibernateUtil;
 /**
  * 
  * @author Anton
+ * @version 0.0.1
  *
  */
 public class PassengerDAOImpl extends GenericDAOImpl<Passenger, Long> implements PassengerDAO {
