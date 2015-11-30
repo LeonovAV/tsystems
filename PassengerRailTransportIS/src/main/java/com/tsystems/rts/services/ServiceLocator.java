@@ -21,7 +21,7 @@ public enum ServiceLocator {
 	 * @return
 	 */
 	public TrainService getTrainService() {
-		return new TrainService();
+		return TrainService.INSTANCE;
 	}
 	
 	/**
@@ -29,7 +29,7 @@ public enum ServiceLocator {
 	 * @return
 	 */
 	public TicketService getTicketService() {
-		return new TicketService();
+		return TicketService.INSTANCE;
 	}
 	
 	/**
@@ -45,7 +45,7 @@ public enum ServiceLocator {
 	 * @return
 	 */
 	public StationService getStationService() {
-		return new StationService();
+		return StationService.INSTANCE;
 	}
 	
 }

@@ -5,10 +5,14 @@
 <hibernate-configuration>
     <session-factory>
         <!-- <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property> -->
+        
         <property name="hibernate.connection.driver_class">net.sf.log4jdbc.DriverSpy</property>
         <property name="hibernate.connection.password">railTransport</property>
         <property name="hibernate.connection.url">jdbc:log4jdbc:mysql://localhost:3306/rail_transport_is</property>
         <property name="hibernate.connection.username">railTransport</property>
+        
+        <!-- <property name="hibernate.connection.datasource">java:comp/env/jdbc/RailDB</property> -->
+        
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
         <property name="hibernate.current_session_context_class">thread</property>
         <property name="hibernate.archive.autodetection">class</property>

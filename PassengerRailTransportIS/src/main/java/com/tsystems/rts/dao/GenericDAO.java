@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.hibernate.Query;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
+
 /**
  * Interface for common methods for all DAO objects.
  * @author Anton
@@ -18,7 +20,7 @@ public interface GenericDAO<T, ID extends Serializable> {
 	 * @param newInstance
 	 * @return primary key for new row in DB
 	 */
-	ID save(T newInstance);
+	ID save(T newInstance) throws MySQLIntegrityConstraintViolationException;
 	
 	/**
 	 * Find instance based on primary key

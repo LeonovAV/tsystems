@@ -1,0 +1,47 @@
+body {
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 18px;
+}
+
+.large-input{
+	height: 40px;
+	font-size: 18px;
+}
+
+.reset {
+	padding-top: 0px;
+	padding-right: 15px;
+    padding-bottom: 15px;
+    padding-left: 0px;
+	margin: 0px;
+}
+
+.tableinput {
+	padding-top: 0px;
+	padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+	margin: 0px;
+}
+
+.rightpadding {
+	padding-top: 0px;
+	padding-right: 15px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+	margin: 0px;
+}
+
+label.valid {
+	width: 24px;
+	height: 24px;
+	background: url(assets/img/valid.png) center center no-repeat;
+	display: inline-block;
+	text-indent: -9999px;
+}
+label.error {
+	font-weight: bold;
+	color: red;
+	padding: 2px 8px;
+	margin-top: 2px;
+}

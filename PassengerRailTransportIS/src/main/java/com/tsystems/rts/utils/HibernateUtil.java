@@ -46,7 +46,7 @@ public class HibernateUtil {
 	 * 	 
 	 * @return
 	 */
-	public static Session beginTransaction() {
+	public static Session beginTransaction() throws HibernateException {
 		Session hibernateSession = HibernateUtil.getSession();
 		hibernateSession.beginTransaction();
 		return hibernateSession;

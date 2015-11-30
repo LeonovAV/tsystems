@@ -3,13 +3,20 @@
                          "http://java.sun.com/dtd/web-app_2_3.dtd">
 <web-app>
  <display-name>Archetype Created Web Application</display-name>
+ <listener>
+  <listener-class>com.tsystems.rts.servlets.HibernateListener</listener-class>
+ </listener>
  <servlet>
   <servlet-name>testServlet</servlet-name>
   <description>Simple servlet showing Hello</description>
-  <servlet-class>com.tsystems.javaschool.servlets.TestServlet</servlet-class>
+  <servlet-class>com.tsystems.rts.servlets.TestServlet</servlet-class>
+ </servlet>
+ <servlet>
+  <servlet-name>FrontServlet</servlet-name>
+  <servlet-class>com.tsystems.rts.servlets.FrontController</servlet-class>
  </servlet>
  <servlet-mapping>
-  <servlet-name>testServlet</servlet-name>
-  <url-pattern>/testServlet</url-pattern>
+  <servlet-name>FrontServlet</servlet-name>
+  <url-pattern>/jsp</url-pattern>
  </servlet-mapping>
 </web-app>

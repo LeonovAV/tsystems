@@ -19,44 +19,21 @@ public class TrainDAOImpl extends GenericDAOImpl<Train, Long> implements TrainDA
 	
 	public List<Train> getTrainsBetweenStations(long firstStationId, long lastStationId, 
 			Date departureTime) {
-		List<Train> trains = getTrainsForStation(firstStationId);
-		List<Train> trainsFromFirstStation = getTrainsBasedOnPeriod(trains, departureTime);
+		String sql = "SELECT train.train_id, train.train_no, train.seats_number, train.starting_date, train.period "
+				+ "FROM station JOIN schedule ON station.station_id = schedule.station_id JOIN train "
+				+ "ON schedule.train_id = train.train_id WHERE station.station_id = :lastStationId AND "
+				+ "train.train_id IN ((SELECT train_id FROM(SELECT train_id, "
+				+ "(DATEDIFF(:departureTime, departure_time)) % period module FROM(SELECT train.train_id, "
+				+ "schedule.departure_time, train.period FROM station JOIN schedule ON "
+				+ "station.station_id = schedule.station_id JOIN train ON schedule.train_id = train.train_id "
+				+ "WHERE station.station_id = :firstStationId) as temp) as temp2 WHERE module = 0))";
 		
-		String sql = "SELECT trns FROM Station st JOIN st.schedules schs JOIN "
-				+ "st.trains trns WHERE st.stationId = :stationId AND trns IN (:ids)";
-		Query query = HibernateUtil.getSession().createQuery(sql)
-				.setParameter("stationId", lastStationId)
-				.setParameterList("ids", trainsFromFirstStation);
+		Query query = HibernateUtil.getSession().createSQLQuery(sql)
+				.addEntity(Train.class)
+				.setParameter("lastStationId", lastStationId)
+				.setParameter("departureTime", departureTime)
+				.setParameter("firstStationId", firstStationId);
 		
-		return findObjects(query);
-	}
-	
-	/**
-	 * Find all trains, which go through chosen station.
-	 * @param stationId chosen station identifier
-	 * @return a list of available trains
-	 */
-	private List<Train> getTrainsForStation(long stationId) {
-		String sql = "SELECT trns FROM Station st JOIN st.schedules schs JOIN "
-				+ "st.trains trns WHERE st.stationId = :stationId";
-		Query query = HibernateUtil.getSession().createQuery(sql)
-				.setParameter("stationId", stationId);
-		return findObjects(query);
-	}
-	
-	/**
-	 * Find trains based on a list of trains, which go through first station (from),
-	 * and chosen date. Period is included to identify train departure date. 
-	 * @param trains list of trains
-	 * @param departureTime chosen date to start trip
-	 * @return a list of available trains
-	 */
-	private List<Train> getTrainsBasedOnPeriod(List<Train> trains, Date departureTime) {
-		String sql = "SELECT t FROM Train t JOIN t.schedules schs WHERE t IN (:ids) "
-				+ "AND DATEDIFF(:departureTime, schs.departureTime) % t.period = 0";
-		Query query = HibernateUtil.getSession().createQuery(sql)
-				.setParameterList("ids", trains)
-				.setParameter("departureTime", departureTime);
 		return findObjects(query);
 	}
 	
@@ -65,11 +42,15 @@ public class TrainDAOImpl extends GenericDAOImpl<Train, Long> implements TrainDA
 		TrainDAOImpl trainDao = new TrainDAOImpl();
 		
 		Calendar cal = Calendar.getInstance();
-		cal.set(2015, Calendar.NOVEMBER, 14);
+		cal.set(2015, Calendar.NOVEMBER, 30);
 		Date date = cal.getTime();
 		cal.clear();
 		
-		System.out.println(trainDao.getTrainsBetweenStations(1L, 4L, date).get(0).getTrainNo());
+		List<Train> trains = trainDao.getTrainsBetweenStations(1L, 5L, date);
+		
+		for (Train train : trains) {
+			System.out.println(train.getTrainNo());
+		}
 		
 		HibernateUtil.commitTransaction();
 		HibernateUtil.closeSession();

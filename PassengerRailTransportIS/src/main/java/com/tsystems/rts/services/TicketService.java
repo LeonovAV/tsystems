@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 import org.hibernate.HibernateException;
 import org.hibernate.NonUniqueResultException;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import com.tsystems.rts.dao.PassengerDAO;
 import com.tsystems.rts.dao.PassengerDAOImpl;
 import com.tsystems.rts.dao.TicketDAO;
@@ -17,6 +18,7 @@ import com.tsystems.rts.dao.TrainDAOImpl;
 import com.tsystems.rts.entities.Passenger;
 import com.tsystems.rts.entities.Ticket;
 import com.tsystems.rts.entities.Train;
+import com.tsystems.rts.utils.BusinessLogicException;
 import com.tsystems.rts.utils.Constants;
 import com.tsystems.rts.utils.HibernateUtil;
 
@@ -26,10 +28,15 @@ import com.tsystems.rts.utils.HibernateUtil;
  * @version 0.0.1
  *
  */
-public class TicketService {
+public enum TicketService {
+	
+	INSTANCE;
+	
+	private TicketService() {
+	}
 	
 	public void purchaseTicket(long trainId, Timestamp trainDepartureDate, String firstName, 
-			String lastName, Date birthdate) {
+			String lastName, Date birthdate) throws BusinessLogicException {
 		// Initialize DAOs
 		PassengerDAO pDao = new PassengerDAOImpl();
 		TicketDAO tDao = new TicketDAOImpl();
@@ -40,9 +47,9 @@ public class TicketService {
 			// Check if passenger has not already purchased a ticket for a train
 			if (passenger != null) {
 				if (pDao.hasTicketForTrain(passenger.getPassengerId(), trainId, trainDepartureDate)) {
-					System.out.println("Passenger has a ticket to this train");
 					HibernateUtil.rollbackTransaction();
-					return;
+					// Throw custom exception
+					throw new BusinessLogicException("Passenger has already purchased ticket to this train");
 				}
 			}
 			
@@ -54,9 +61,9 @@ public class TicketService {
 			
 			// No free seats in the train
 			if (nPurchasedTickets > nSeats) {
-				System.out.println("No free seats in the train");
 				HibernateUtil.rollbackTransaction();
-				return;
+				// Throw custom exception
+				throw new BusinessLogicException("No free seats in the train");
 			}
 			
 			// Time constraint
@@ -65,9 +72,9 @@ public class TicketService {
 			
 			// Remaining time before the train departure should be more than 10 minutes
 			if (remainingMinutes <= Constants.MAX_REMAINING_TIME) {
-				System.out.println("Can not by ticket because of time limit. Remaining minutes: " + remainingMinutes);
 				HibernateUtil.rollbackTransaction();
-				return;
+				// Throw custom exception
+				throw new BusinessLogicException("Can not by ticket because of time limit. Remaining minutes: " + remainingMinutes);
 			}
 			
 			// Ticket can be purchased by a passenger
@@ -90,8 +97,16 @@ public class TicketService {
 			HibernateUtil.commitTransaction();
 		}
 		catch (NonUniqueResultException e) {
+			// Log exception
+			throw new BusinessLogicException(e);
 		}
 		catch (HibernateException e) {
+			// Log exception
+			throw new BusinessLogicException(e);
+		} 
+		catch (MySQLIntegrityConstraintViolationException e) {
+			// Log exception
+			throw new BusinessLogicException(e);
 		}
 	}
 	
@@ -100,7 +115,11 @@ public class TicketService {
 		cal.set(1992, Calendar.JANUARY, 9);
 		Date date = cal.getTime();
 		cal.clear();
-		new TicketService().purchaseTicket(2, Timestamp.valueOf("2015-11-18 23:18:00"), 
-				"Anton", "Leonov", date);
+		try {
+			TicketService.INSTANCE.purchaseTicket(2, Timestamp.valueOf("2015-11-18 23:18:00"), 
+					"Anton", "Leonov", date);
+		} catch (BusinessLogicException e) {
+			e.printStackTrace();
+		}
 	}
 }
