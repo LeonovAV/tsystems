@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.tsystems.rts.entities.Passenger;
+import com.tsystems.rts.utils.DAOException;
 
 /**
  * 
@@ -19,7 +20,7 @@ public interface PassengerDAO extends GenericDAO<Passenger, Long> {
 	 * @param lastName
 	 * @return
 	 */
-	public Passenger findPassenger(String firstName, String lastName, Date birthdate);
+	public Passenger findPassenger(String firstName, String lastName, Date birthdate) throws DAOException;
 	
 	/**
 	 * 
@@ -28,14 +29,14 @@ public interface PassengerDAO extends GenericDAO<Passenger, Long> {
 	 * @param trainDepartureDate
 	 * @return
 	 */
-	public boolean hasTicketForTrain(long passengerId, long trainId, Timestamp trainDepartureDate);
+	public boolean hasTicketForTrain(long passengerId, long trainId, Timestamp trainDepartureDate) throws DAOException;
 	
 	/**
 	 * 
 	 * @param trainId
 	 * @return
 	 */
-	List<Passenger> getRegisteredPassengers(long trainId);
+	List<Passenger> getRegisteredPassengers(long trainId) throws DAOException;
 	
 	/**
 	 * 
@@ -43,5 +44,5 @@ public interface PassengerDAO extends GenericDAO<Passenger, Long> {
 	 * @param trainDepartureDate
 	 * @return
 	 */
-	List<Passenger> getRegisteredPassengers(long trainId, Timestamp trainDepartureDate);
+	List<Passenger> getRegisteredPassengers(long trainId, Timestamp trainDepartureDate) throws DAOException;
 }

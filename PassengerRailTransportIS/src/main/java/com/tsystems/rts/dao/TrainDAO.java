@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.tsystems.rts.entities.Train;
+import com.tsystems.rts.utils.DAOException;
 
 /**
  * 
@@ -20,6 +21,6 @@ public interface TrainDAO extends GenericDAO<Train, Long> {
 	 * @param departureTime date to start a train search
 	 * @return a list of available trains
 	 */
-	List<Train> getTrainsBetweenStations(long firstStationId, long lastStationId, Date departureTime);
+	List<Train> getTrainsBetweenStations(long firstStationId, long lastStationId, Date departureTime) throws DAOException;
 	
 }

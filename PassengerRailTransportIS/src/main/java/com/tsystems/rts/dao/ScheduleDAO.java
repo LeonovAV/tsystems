@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.tsystems.rts.entities.Schedule;
+import com.tsystems.rts.utils.DAOException;
 
 /**
  * 
@@ -20,6 +21,6 @@ public interface ScheduleDAO extends GenericDAO<Schedule, Long>{
 	 * @param date chosen date
 	 * @return list of available trains and their arrival and departure time
 	 */
-	List<Schedule> getAllSchedules(long stationId, Date date);
+	List<Schedule> getAllSchedules(long stationId, Date date) throws DAOException;
 	
 }

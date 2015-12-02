@@ -131,5 +131,11 @@ public class Train {
 	public void setSchedules(List<Schedule> schedules) {
 		this.schedules = schedules;
 	}
+
+	@Override
+	public String toString() {
+		return "Train [trainId=" + trainId + ", trainNo=" + trainNo + ", startingDate=" + startingDate + ", period="
+				+ period + "]";
+	}
 	
 }

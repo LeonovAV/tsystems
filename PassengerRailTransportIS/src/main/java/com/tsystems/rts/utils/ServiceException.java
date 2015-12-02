@@ -6,22 +6,22 @@ package com.tsystems.rts.utils;
  * @version 0.0.1
  *
  */
-public class BusinessLogicException extends Exception {
+public class ServiceException extends Exception {
 	
 	private static final long serialVersionUID = 3645019667823241534L;
 
-	public BusinessLogicException() {
+	public ServiceException() {
 	}
 	        
-	public BusinessLogicException(String message) {
+	public ServiceException(String message) {
         super(message);
     }
 	        
-	public BusinessLogicException(Throwable cause) {
+	public ServiceException(Throwable cause) {
         super(cause);
     }
 	
-	public BusinessLogicException(String message, Throwable cause) {
+	public ServiceException(String message, Throwable cause) {
         super(message, cause);
     }
 	

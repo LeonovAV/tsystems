@@ -45,7 +45,7 @@
 		
 		<div class="row reset">
 			<div class="col-lg-8 rightpadding">
-				<div class="pull-right rightpadding"><label><input type="checkbox" name="isBackNeeded" value="back">Back</label></div>
+				<div class="pull-right rightpadding"><label><input type="checkbox" id="isBackNeeded" name="isBackNeeded" value="back">Back</label></div>
 			</div>
 			<div class="col-lg-4 rightpadding">
 				<input type="date" class="form-control large-input" id="backDepartureDate" name="backDepartureDate" disabled>
@@ -53,9 +53,7 @@
 		</div>
 		
 		<div class="row reset">
-			<div class="col-lg-8 rightpadding">
-			</div>
-			<div class="col-lg-2 rightpadding">
+			<div class="col-lg-12 rightpadding">
 				<div class="pull-right">
 					<input type="hidden" name="command" value="FindTrain">
 					<input type="submit" class="btn btn-info large-input" value="Search">

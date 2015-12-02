@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import com.tsystems.rts.entities.Ticket;
+import com.tsystems.rts.utils.DAOException;
 
 /**
  * 
@@ -13,6 +14,6 @@ import com.tsystems.rts.entities.Ticket;
  */
 public interface TicketDAO extends GenericDAO<Ticket, Long> {
 	
-	public List<Ticket> getPurchasedTicketsForTrain(long trainId, Timestamp trainDepartureDate);
+	public List<Ticket> getPurchasedTicketsForTrain(long trainId, Timestamp trainDepartureDate) throws DAOException;
 	
 }

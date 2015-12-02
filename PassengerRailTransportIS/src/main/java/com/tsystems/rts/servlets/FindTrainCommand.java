@@ -10,11 +10,12 @@ import javax.servlet.http.HttpServletResponse;
 import com.tsystems.rts.entities.Train;
 import com.tsystems.rts.services.ServiceLocator;
 import com.tsystems.rts.services.TrainService;
+import com.tsystems.rts.utils.ServiceException;
 import com.tsystems.rts.utils.Utility;
 
 public class FindTrainCommand implements Command {
 
-	public String process(HttpServletRequest req, HttpServletResponse resp) {
+	public String process(HttpServletRequest req, HttpServletResponse resp) throws ServiceException {
 		try {
 			// Get parameters from request
 			long firstStationId = Long.parseLong(req.getParameter("firstStationId"));
@@ -48,8 +49,7 @@ public class FindTrainCommand implements Command {
 			req.setAttribute("backTrainList", backTrains);
 		
 		} catch (ParseException e) {
-			// Log exception
-			e.printStackTrace();
+			throw new ServiceException("Date is not valid", e);
 		}
 		
 		return "/jsp/viewTrains.jsp";

@@ -37,7 +37,7 @@ public enum ServiceLocator {
 	 * @return
 	 */
 	public ScheduleService getScheduleService() {
-		return new ScheduleService();
+		return ScheduleService.INSTANCE;
 	}
 	
 	/**
@@ -48,4 +48,11 @@ public enum ServiceLocator {
 		return StationService.INSTANCE;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
+	public WorkerService getWorkerService() {
+		return WorkerService.INSTANCE;
+	}
 }

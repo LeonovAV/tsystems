@@ -3,13 +3,14 @@ package com.tsystems.rts.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 
-import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import com.tsystems.rts.dao.StationDAO;
 import com.tsystems.rts.dao.StationDAOImpl;
 import com.tsystems.rts.entities.Station;
-import com.tsystems.rts.utils.BusinessLogicException;
+import com.tsystems.rts.utils.ServiceException;
+import com.tsystems.rts.utils.DAOException;
 import com.tsystems.rts.utils.HibernateUtil;
 
 /**
@@ -29,7 +30,7 @@ public enum StationService {
 	 * Add several stations. Station name should be unique
 	 * @param stations list of station names
 	 */
-	public void addNewStations(List<String> stations) throws BusinessLogicException {
+	public void addNewStations(List<String> stations) throws ServiceException {
 		// Initialize DAOs
 		StationDAO sDao = new StationDAOImpl();
 		
@@ -45,13 +46,16 @@ public enum StationService {
 			HibernateUtil.commitTransaction();
 		}
 		catch (HibernateException e) {
-			HibernateUtil.rollbackTransaction();
-			// Log exception
-			throw new BusinessLogicException(e);
-		} catch (MySQLIntegrityConstraintViolationException e) {
-			HibernateUtil.rollbackTransaction();
-			// Log exception
-			throw new BusinessLogicException("Can not save the same object in database", e);
+			throw new ServiceException("Transaction failed, because of lost connection", e);
+		}
+		catch (DAOException e) {
+			Logger.getLogger("LOG-FILE-APPENDER").fatal("Begin or commit transaction failed", e);
+			try {
+				HibernateUtil.rollbackTransaction();
+			} catch (DAOException e2) {
+				throw new ServiceException(e2);
+			}
+			throw new ServiceException(e);
 		}
 	}
 	
@@ -59,7 +63,7 @@ public enum StationService {
 	 * Delete stations and update all routes and schedules, that contain chosen stations.
 	 * @param stationIds list of unique station identifiers
 	 */
-	public void deleteStations(List<Long> stationIds) throws BusinessLogicException {
+	public void deleteStations(List<Long> stationIds) throws ServiceException {
 		StationDAO sDao = new StationDAOImpl();
 		try {
 			Station station = null;
@@ -72,14 +76,18 @@ public enum StationService {
 			}
 			HibernateUtil.commitTransaction();
 		}
-		catch (HibernateException e) {
-			HibernateUtil.rollbackTransaction();
-			// Log exception
-			throw new BusinessLogicException(e);
+		catch (DAOException e) {
+			Logger.getLogger("LOG-FILE-APPENDER").fatal("Begin or commit transaction failed", e);
+			try {
+				HibernateUtil.rollbackTransaction();
+			} catch (DAOException e2) {
+				throw new ServiceException(e2);
+			}
+			throw new ServiceException(e);
 		}
 	}
 	
-	public List<Station> getAllStations() throws BusinessLogicException {
+	public List<Station> getAllStations() throws ServiceException {
 		StationDAO sDao = new StationDAOImpl();
 		List<Station> stations = null;
 		try {
@@ -87,10 +95,14 @@ public enum StationService {
 			stations = sDao.findAllObjects(Station.class);
 			HibernateUtil.commitTransaction();
 		}
-		catch (HibernateException e) {
-			HibernateUtil.rollbackTransaction();
-			// Log exception
-			throw new BusinessLogicException(e);
+		catch (DAOException e) {
+			Logger.getLogger("LOG-FILE-APPENDER").fatal("Begin or commit transaction failed", e);
+			try {
+				HibernateUtil.rollbackTransaction();
+			} catch (DAOException e2) {
+				throw new ServiceException(e2);
+			}
+			throw new ServiceException(e);
 		}
 		return stations;
 	}
@@ -103,8 +115,12 @@ public enum StationService {
 //		StationService.INSTANCE.deleteStations(stations);
 		try {
 			StationService.INSTANCE.addNewStations(stations);
-		} catch (BusinessLogicException e) {
+		} catch (ServiceException e) {
+			System.out.println(e.getMessage());
 			e.printStackTrace();
+		}
+		catch (ExceptionInInitializerError e) {
+			System.out.println(e.getMessage());
 		}
 	}
 	

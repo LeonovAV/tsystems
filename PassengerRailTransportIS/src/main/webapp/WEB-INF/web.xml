@@ -3,14 +3,17 @@
                          "http://java.sun.com/dtd/web-app_2_3.dtd">
 <web-app>
  <display-name>Archetype Created Web Application</display-name>
+ <filter>
+  <filter-name>AuthFilter</filter-name>
+  <filter-class>com.tsystems.rts.servlets.LoggingFilter</filter-class>
+ </filter>
+ <filter-mapping>
+  <filter-name>AuthFilter</filter-name>
+  <url-pattern>/jsp/workers/*</url-pattern>
+</filter-mapping>
  <listener>
   <listener-class>com.tsystems.rts.servlets.HibernateListener</listener-class>
  </listener>
- <servlet>
-  <servlet-name>testServlet</servlet-name>
-  <description>Simple servlet showing Hello</description>
-  <servlet-class>com.tsystems.rts.servlets.TestServlet</servlet-class>
- </servlet>
  <servlet>
   <servlet-name>FrontServlet</servlet-name>
   <servlet-class>com.tsystems.rts.servlets.FrontController</servlet-class>

@@ -1,22 +1,46 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE log4j:configuration SYSTEM 'log4j.dtd'>
-<log4j:configuration xmlns:log4j='http:jakarta.apache.orglog4j'>
- 
-	<appender name='console-log4jdbc' class='org.apache.log4j.ConsoleAppender'>
-	  <param name='Target' value='System.out' />
-	  <layout class='org.apache.log4j.PatternLayout'>
-	    <param name='ConversionPattern' value='%m%n' />
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration>
+	
+	<root>
+	  <priority value="DEBUG"/>
+	  <appender-ref ref="LOG-FILE-APPENDER"/>
+  	</root>
+  	
+	<appender name="console-log4jdbc" class="org.apache.log4j.ConsoleAppender">
+	  <param name="Target" value="System.out" />
+	  <layout class="org.apache.log4j.PatternLayout">
+	    <param name="ConversionPattern" value="%m%n" />
 	  </layout>
 	</appender>
 	
-	<logger name='jdbc.sqltiming' additivity='false'>
-	  <level value='info' />
-	  <appender-ref ref='console-log4jdbc' />
+	<logger name="jdbc.sqltiming" additivity="false">
+	  <level value="info" />
+	  <appender-ref ref="console-log4jdbc" />
 	</logger>
 	
-	<logger name='jdbc.resultsettable' additivity='false'>
-	  <level value='info' />
-	  <appender-ref ref='console-log4jdbc' />
+	<logger name="jdbc.resultsettable" additivity="false">
+	  <level value="info" />
+	  <appender-ref ref="console-log4jdbc" />
 	</logger>
 	
+	<appender name="CONSOLE-DEBUG" class="org.apache.log4j.ConsoleAppender">
+      <param name="target" value="System.out"/>
+	  <layout class="org.apache.log4j.PatternLayout">
+	    <param name="ConversionPattern" value="%d{ISO8601} [%5p] %m at %l%n"/>
+	  </layout>
+	  <filter class="org.apache.log4j.varia.LevelRangeFilter">
+	    <param name="LevelMin" value="ALL"/>
+	    <param name="LevelMax" value="INFO"/>
+	  </filter>
+  	</appender>
+
+  	<appender name="LOG-FILE-APPENDER" class="org.apache.log4j.FileAppender">
+      <param name="file" value="D:\\repositories\\PassengerRailTransportIS\\logs\\rts.log"/>
+      <layout class="org.apache.log4j.PatternLayout">
+        <param name="ConversionPattern" value="%d{ISO8601} [%5p] %c %m at %l%n"/>
+      </layout>
+  	</appender>
 </log4j:configuration>
+
+

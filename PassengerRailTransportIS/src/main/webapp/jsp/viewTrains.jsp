@@ -73,7 +73,7 @@
    	</div>
     
     <!-- Back trains from station B to A -->
-    <c:if test="${not empty departureTimeBack}">
+    <c:if test="${not empty backDepartureDate}">
     	<div class="row reset">
 			<label>Back</label>
 		</div>
@@ -84,7 +84,7 @@
 		<div class="col-lg-12">
 	    	<c:choose>
 	        	<c:when test="${not empty backTrainList}">
-		        	<table  class="table table-striped">
+		        	<table  class="table table-striped" id="trainsBack">
 		                <thead>
 		                    <tr>
 		                        <td style="display:none"></td>
@@ -272,7 +272,7 @@
 			if ($("#forwardTrains :input[type=radio]").is(':checked') && $("#trainsBack :input[type=radio]").is(':checked')) {
 				$("#purchaseTicket").removeAttr('disabled');
 			}
-			else {
+			else if (!$("#forwardTrains :input[type=radio]").is(':checked') || !$("#trainsBack :input[type=radio]").is(':checked')) {
 				$("#purchaseTicket").attr('disabled', 'disabled');
 			}
 		}

@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.tsystems.rts.services.ServiceLocator;
 import com.tsystems.rts.services.TicketService;
-import com.tsystems.rts.utils.BusinessLogicException;
+import com.tsystems.rts.utils.ServiceException;
 import com.tsystems.rts.utils.Utility;
 
 /**
@@ -21,35 +21,21 @@ import com.tsystems.rts.utils.Utility;
  */
 public class BookTicketCommand implements Command {
 
-	public String process(HttpServletRequest req, HttpServletResponse resp) throws BusinessLogicException {
-		System.out.println("In Book Ticket Command");
+	public String process(HttpServletRequest req, HttpServletResponse resp) throws ServiceException {
 		try {
 			// Get passenger data
 			String firstName = req.getParameter("firstName");
 			String lastName = req.getParameter("lastName");
 			Date birthdate = Utility.convertString(req.getParameter("birthdate"));
 			
-			System.out.println("Name " + firstName + "Date " + birthdate);
-			
-			// Get train parameters from request
+			// Get forward train parameters from request
 			long trainIdForward = Long.parseLong(req.getParameter("trainIdForward"));
-			
-			System.out.println(trainIdForward);
 			
 			Timestamp departureTimeForward = Timestamp.valueOf(req.getParameter("departureTimeForward"));
 			
-			System.out.println("Date: " + departureTimeForward);
-			
-			// Use service to buy ticket
-			TicketService service = ServiceLocator.INSTANCE.getTicketService();
-						
-			// Buy ticket for the forward train
-			service.purchaseTicket(trainIdForward, departureTimeForward, firstName, lastName, birthdate);
-			
+			// Get back train parameters if exist
 			String trainBack = req.getParameter("trainIdBack");
 			String departureBack = req.getParameter("departureTimeBack");
-			
-			System.out.println(trainBack + "Date: " + departureBack);
 			
 			boolean isTrainBackValid = trainBack != null && !trainBack.isEmpty();
 			boolean isDepartureBackValid = departureBack != null && !departureBack.isEmpty();
@@ -58,13 +44,26 @@ public class BookTicketCommand implements Command {
 			Timestamp departureTimeBack = null;
 			if (isTrainBackValid && isDepartureBackValid) {
 				trainIdBack = Long.parseLong(trainBack);
-				departureTimeBack = Timestamp.valueOf(trainBack);
-				// Buy ticket for the back train
-				service.purchaseTicket(trainIdBack, departureTimeBack, firstName, lastName, birthdate);
+				departureTimeBack = Timestamp.valueOf(departureBack);
+			}
+			
+			// Use service to buy ticket
+			TicketService service = ServiceLocator.INSTANCE.getTicketService();
+			
+			// Buy ticket for the trains
+			String errorMsg = service.purchaseTicket(trainIdForward, departureTimeForward, trainIdBack, departureTimeBack, 
+					firstName, lastName, birthdate);
+			
+			if (!errorMsg.isEmpty()) {
+				req.setAttribute("errorMsg", errorMsg);
+				return "/jsp/error.jsp";
 			}
 		}
 		catch (ParseException e) {
-			// Log exception
+			throw new ServiceException("Date is not valid", e);
+		}
+		catch (IllegalArgumentException e) {
+			throw new ServiceException("Date format is not valid", e);
 		}
 		return "/jsp/successTicketBooking.jsp";
 	}

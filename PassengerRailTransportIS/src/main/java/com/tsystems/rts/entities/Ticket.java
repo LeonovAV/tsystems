@@ -78,5 +78,10 @@ public class Ticket {
 	public void setTrainDepartureDate(Timestamp trainDepartureDate) {
 		this.trainDepartureDate = trainDepartureDate;
 	}
+
+	@Override
+	public String toString() {
+		return "Ticket [ticketId=" + ticketId + ", trainDepartureDate=" + trainDepartureDate + "]";
+	}
 	
 }

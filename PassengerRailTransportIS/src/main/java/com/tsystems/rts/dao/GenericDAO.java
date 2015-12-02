@@ -4,8 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.hibernate.Query;
-
-import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
+import com.tsystems.rts.utils.DAOException;
 
 /**
  * Interface for common methods for all DAO objects.
@@ -20,7 +19,7 @@ public interface GenericDAO<T, ID extends Serializable> {
 	 * @param newInstance
 	 * @return primary key for new row in DB
 	 */
-	ID save(T newInstance) throws MySQLIntegrityConstraintViolationException;
+	ID save(T newInstance) throws DAOException;
 	
 	/**
 	 * Find instance based on primary key
@@ -28,33 +27,33 @@ public interface GenericDAO<T, ID extends Serializable> {
 	 * @param id object primary key
 	 * @return existed instance, otherwise null
 	 */
-	T findById(Class<T> clazz, ID id);
+	T findById(Class<T> clazz, ID id) throws DAOException;
 	
 	/**
 	 * Delete instance from DB
 	 * @param instance object, that will be deleted from data store
 	 */
-	void delete(T instance);
+	void delete(T instance) throws DAOException;
 	
 	/**
 	 * 
 	 * @param query
 	 * @return
 	 */
-	T findObject(Query query);
+	T findObject(Query query) throws DAOException;
 	
 	/**
 	 * 
 	 * @param query
 	 * @return
 	 */
-	List<T> findObjects(Query query);
+	List<T> findObjects(Query query) throws DAOException;
 	
 	/**
 	 * 
 	 * @param clazz
 	 * @return
 	 */
-	List<T> findAllObjects(Class<T> clazz);
+	List<T> findAllObjects(Class<T> clazz) throws DAOException;
 	
 }

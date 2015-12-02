@@ -91,4 +91,10 @@ public class Passenger {
 		this.purchasedTickets = purchasedTickets;
 	}
 
+	@Override
+	public String toString() {
+		return "Passenger [passengerId=" + passengerId + ", firstName=" + firstName + ", lastName=" + lastName
+				+ ", birthdate=" + birthdate + "]";
+	}
+
 }

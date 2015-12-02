@@ -14,15 +14,20 @@
 	<div class="container">
 		<ul class="nav nav-tabs">
 		    <li class="active"><a data-toggle="pill" href="#trains">Find trains</a></li>
-		    <li><a data-toggle="pill" href="#schedules">View schedule</a></li>
+		    <li><a data-toggle="pill" href="#schedules">Find schedules</a></li>
 	 	</ul>
 		<div class="tab-content">
 			<div id="trains" class="tab-pane fade in active">
 				<jsp:include page="findTrains.jsp" flush="true"/>
 		  	</div>
 		   	<div id="schedules" class="tab-pane fade">
+		   		<jsp:include page="findScheduleForm.jsp" flush="true"/>
 		   	</div>
 		</div>
+  	</div>
+  	
+  	<div class="row reset">
+  		<p>${errorMsg}</p>
   	</div>
   	
 </body>

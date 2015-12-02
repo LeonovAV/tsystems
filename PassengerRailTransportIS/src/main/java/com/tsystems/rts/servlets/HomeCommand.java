@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.tsystems.rts.entities.Station;
 import com.tsystems.rts.services.ServiceLocator;
 import com.tsystems.rts.services.StationService;
-import com.tsystems.rts.utils.BusinessLogicException;
+import com.tsystems.rts.utils.ServiceException;
 
 /**
  * Class presents home page for web. To represent home page "Home" command is used.
@@ -18,7 +18,7 @@ import com.tsystems.rts.utils.BusinessLogicException;
  */
 public class HomeCommand implements Command {
 
-	public String process(HttpServletRequest req, HttpServletResponse resp) throws BusinessLogicException {
+	public String process(HttpServletRequest req, HttpServletResponse resp) throws ServiceException {
 		// Load all stations
 		StationService service = ServiceLocator.INSTANCE.getStationService();
 		List<Station> stations = service.getAllStations();

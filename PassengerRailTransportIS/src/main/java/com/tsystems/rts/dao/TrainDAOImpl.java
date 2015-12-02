@@ -7,6 +7,7 @@ import java.util.List;
 import org.hibernate.Query;
 
 import com.tsystems.rts.entities.Train;
+import com.tsystems.rts.utils.DAOException;
 import com.tsystems.rts.utils.HibernateUtil;
 
 /**
@@ -18,7 +19,7 @@ import com.tsystems.rts.utils.HibernateUtil;
 public class TrainDAOImpl extends GenericDAOImpl<Train, Long> implements TrainDAO {
 	
 	public List<Train> getTrainsBetweenStations(long firstStationId, long lastStationId, 
-			Date departureTime) {
+			Date departureTime) throws DAOException {
 		String sql = "SELECT train.train_id, train.train_no, train.seats_number, train.starting_date, train.period "
 				+ "FROM station JOIN schedule ON station.station_id = schedule.station_id JOIN train "
 				+ "ON schedule.train_id = train.train_id WHERE station.station_id = :lastStationId AND "
@@ -38,23 +39,31 @@ public class TrainDAOImpl extends GenericDAOImpl<Train, Long> implements TrainDA
 	}
 	
 	public static void main(String[] args) {
-		HibernateUtil.beginTransaction();
-		TrainDAOImpl trainDao = new TrainDAOImpl();
+		try {
+			HibernateUtil.beginTransaction();
+			TrainDAOImpl trainDao = new TrainDAOImpl();
+			
+			Calendar cal = Calendar.getInstance();
+			cal.set(2015, Calendar.NOVEMBER, 30);
+			Date date = cal.getTime();
+			cal.clear();
+			
+			List<Train> trains;
 		
-		Calendar cal = Calendar.getInstance();
-		cal.set(2015, Calendar.NOVEMBER, 30);
-		Date date = cal.getTime();
-		cal.clear();
+			trains = trainDao.getTrainsBetweenStations(1L, 5L, date);
 		
-		List<Train> trains = trainDao.getTrainsBetweenStations(1L, 5L, date);
 		
-		for (Train train : trains) {
-			System.out.println(train.getTrainNo());
+			for (Train train : trains) {
+				System.out.println(train.getTrainNo());
+			}
+		
+			HibernateUtil.commitTransaction();
+			HibernateUtil.closeSession();
+			HibernateUtil.closeSessionFactory();
+		} catch (DAOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		
-		HibernateUtil.commitTransaction();
-		HibernateUtil.closeSession();
-		HibernateUtil.closeSessionFactory();
 	}
 	
 }
